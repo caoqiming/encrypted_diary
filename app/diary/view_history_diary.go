@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/rivo/tview"
@@ -17,6 +18,9 @@ func visit(files *[]string) filepath.WalkFunc {
 			log.Fatal(err)
 		}
 		if info.IsDir() {
+			return nil
+		}
+		if strings.Contains(path, ".git") {
 			return nil
 		}
 		*files = append(*files, path)
