@@ -33,8 +33,11 @@ func SaveToLocalPath(rootPath, password, text string, diaryTime time.Time) {
 	hash := sha256.Sum256(diaryData.Data)
 
 	diaryFormat.Data = base64.StdEncoding.EncodeToString(diaryData.Data)
-	filePath := path.Join(rootPath, fmt.Sprint(diaryTime.Year()), fmt.Sprintf("%d", diaryTime.Month()), fmt.Sprintf("%d-%x", diaryTime.Day(), hash[:2]))
-	err := os.MkdirAll(path.Dir(filePath), 0750) // rwx r-x ---
+	// Create a directory path down to the day and use the current time for the file name
+	dayFolderPath := path.Join(rootPath, fmt.Sprint(diaryTime.Year()), fmt.Sprintf("%02d", diaryTime.Month()), fmt.Sprintf("%02d", diaryTime.Day()))
+	fileName := fmt.Sprintf("%02d-%02d-%02d-%x.json", diaryTime.Hour(), diaryTime.Minute(), diaryTime.Second(), hash[:2]) // Using .json extension for clarity
+	filePath := path.Join(dayFolderPath, fileName)
+	err := os.MkdirAll(dayFolderPath, 0750) // Ensure all directories up to the day are created
 	if err != nil {
 		log.Fatal("fail to mkdir", err)
 	}
@@ -44,12 +47,11 @@ func SaveToLocalPath(rootPath, password, text string, diaryTime time.Time) {
 		log.Fatal("fail to marshal diary format", err)
 	}
 
-	// 写入到文件
+	// Write to the file
 	file, err := os.Create(filePath)
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	defer file.Close()
 	_, err = file.Write(DiaryFormatJson)
 	if err != nil {
