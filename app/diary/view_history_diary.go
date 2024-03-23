@@ -208,6 +208,12 @@ func (a *DiaryApp) DiarySelected(d *pathAndInfo) func() {
 func (a *DiaryApp) BackSelected(p *timePoint) func() {
 	return func() {
 		p = p.Father
+		if p == nil {
+			// Handle the case when p is nil
+			// For example, you can go back to the root menu
+			a.RootSelected()
+			return
+		}
 		if p.Day != 0 {
 			a.DaySelected(p)()
 			return
