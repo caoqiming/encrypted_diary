@@ -164,7 +164,7 @@ func (a *DiaryApp) MonthSelected(p *timePoint) func() {
 		index := 0
 		for _, d := range p.Diaries {
 			dt := time.Unix(d.Info.Time, 0)
-			list.AddItem(fmt.Sprintf("%d", dt.Day()), "", rune('a'+index), a.DiarySelected(d))
+			list.AddItem(dt.Format("2006-01-02 15:04:05"), "", rune('a'+index), a.DiarySelected(d))
 			index++
 		}
 		a.Menu.AddItem(list, 0, 1, true)
