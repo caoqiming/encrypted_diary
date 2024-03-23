@@ -47,7 +47,7 @@ func SaveToLocalPath(rootPath, password, text string, diaryTime time.Time) {
 		log.Fatal("fail to marshal diary format", err)
 	}
 
-	// Write to the file
+	// 写入到文件
 	file, err := os.Create(filePath)
 	if err != nil {
 		log.Fatal(err)

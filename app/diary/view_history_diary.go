@@ -47,6 +47,7 @@ func GetPathAndInfo(files []string) []*pathAndInfo {
 type timePoint struct {
 	Year       int
 	Month      int
+	Day        int
 	Father     *timePoint
 	Childs     map[int]*timePoint // root 下面用年做索引，年下面用月做索引
 	ChildsList []*timePoint       // 内容同Childs，用于存排序后的结果
@@ -100,7 +101,14 @@ func BuildPathAndInfoTree(pathAndInfo []*pathAndInfo) *timePoint {
 			month.Father = year
 			year.Childs[int(t.Month())] = month
 		}
-		month.Diaries = append(month.Diaries, p)
+		day, ok := month.Childs[int(t.Day())]
+		if !ok {
+			day = newTimePoint()
+			day.Day = int(t.Day())
+			day.Father = month
+			month.Childs[int(t.Day())] = day
+		}
+		day.Diaries = append(day.Diaries, p)
 	}
 	// 排序
 	sortPathAndInfoTree(root)
@@ -155,8 +163,24 @@ func (a *DiaryApp) YearSelected(p *timePoint) func() {
 	}
 }
 
-// 显示历史日记的时候还未选择具体日记
+// 显示历史日记的时候还未选择具体日期
 func (a *DiaryApp) MonthSelected(p *timePoint) func() {
+	return func() {
+		a.Menu.Clear()
+		list := tview.NewList()
+		list.AddItem("..", "", rune('`'), a.BackSelected(p))
+		index := 0
+		for _, d := range p.ChildsList {
+			list.AddItem(fmt.Sprintf("%d", d.Day), "", rune('a'+index), a.DaySelected(d))
+			index++
+		}
+		a.Menu.AddItem(list, 0, 1, true)
+		a.App.SetFocus(list)
+	}
+}
+
+// 显示历史日记的时候还未选择具体日记
+func (a *DiaryApp) DaySelected(p *timePoint) func() {
 	return func() {
 		a.Menu.Clear()
 		list := tview.NewList()
@@ -164,7 +188,7 @@ func (a *DiaryApp) MonthSelected(p *timePoint) func() {
 		index := 0
 		for _, d := range p.Diaries {
 			dt := time.Unix(d.Info.Time, 0)
-			list.AddItem(fmt.Sprintf("%d", dt.Day()), "", rune('a'+index), a.DiarySelected(d))
+			list.AddItem(dt.Format("2006-01-02 15:04:05"), "", rune('a'+index), a.DiarySelected(d))
 			index++
 		}
 		a.Menu.AddItem(list, 0, 1, true)
@@ -184,11 +208,15 @@ func (a *DiaryApp) DiarySelected(d *pathAndInfo) func() {
 func (a *DiaryApp) BackSelected(p *timePoint) func() {
 	return func() {
 		p = p.Father
-		if p.Year != 0 {
-			a.YearSelected(p)()
+		if p.Day != 0 {
+			a.DaySelected(p)()
 			return
 		}
-		a.RootSelected()
+		if p.Month != 0 {
+			a.MonthSelected(p)()
+			return
+		}
+		a.YearSelected(p)()
 	}
 }
 

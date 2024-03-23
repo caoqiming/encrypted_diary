@@ -19,6 +19,8 @@ func (a *DiaryApp) ActivateTextArea() func() {
 }
 
 // 保存日志
+// Save the text from the TextArea to a local path.
+// The local path is specified by the "../data" parameter.
 func (a *DiaryApp) Save() func() {
 	return func() {
 		text := a.TextArea.GetText()
