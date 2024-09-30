@@ -1,4 +1,4 @@
-module diary
+module github.com/caoqiming/encrypted_diary
 
 go 1.18
 

@@ -1,6 +1,6 @@
 package main
 
-import "diary/app/diary"
+import "github.com/caoqiming/encrypted_diary/app/diary"
 
 func main() {
 	diary.Init()
