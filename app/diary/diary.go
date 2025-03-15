@@ -2,7 +2,7 @@ package diary
 
 import (
 	"crypto/sha256"
-	"diary/app/diary/pkg/encript"
+	"github.com/caoqiming/encrypted_diary/app/diary/pkg/encript"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"

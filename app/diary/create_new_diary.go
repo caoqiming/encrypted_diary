@@ -25,6 +25,6 @@ func (a *DiaryApp) Save() func() {
 	return func() {
 		text := a.TextArea.GetText()
 		a.App.Stop()
-		SaveToLocalPath("../data", *a.PassWord, text, time.Now())
+		SaveToLocalPath("../diary-data", *a.PassWord, text, time.Now())
 	}
 }

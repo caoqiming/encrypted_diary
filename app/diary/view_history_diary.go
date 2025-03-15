@@ -118,7 +118,7 @@ func (a *DiaryApp) ShowHistoryDiaries() func() {
 func (a *DiaryApp) RootSelected() {
 	if a.Root == nil {
 		var files []string
-		rootPath := "../data"
+		rootPath := "../diary-data"
 		if err := filepath.Walk(rootPath, visit(&files)); err != nil {
 			panic(err)
 		}
