@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/caoqiming/encrypted_diary/app/diary/pkg/utils"
 	"github.com/rivo/tview"
 )
 
@@ -36,6 +37,9 @@ type pathAndInfo struct {
 func GetPathAndInfo(files []string) []*pathAndInfo {
 	result := make([]*pathAndInfo, 0, len(files))
 	for _, f := range files {
+		if strings.Contains(f, "DS_Store") {
+			continue
+		}
 		result = append(result, &pathAndInfo{
 			Path: f,
 			Info: ReadInfoFromLocalPath(f),
@@ -118,8 +122,10 @@ func (a *DiaryApp) ShowHistoryDiaries() func() {
 func (a *DiaryApp) RootSelected() {
 	if a.Root == nil {
 		var files []string
-		rootPath := "../diary-data"
-		if err := filepath.Walk(rootPath, visit(&files)); err != nil {
+		if a.RootPath == nil {
+			a.RootPath = utils.Ptr("../diary-data")
+		}
+		if err := filepath.Walk(*a.RootPath, visit(&files)); err != nil {
 			panic(err)
 		}
 

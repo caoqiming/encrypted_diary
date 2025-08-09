@@ -17,6 +17,7 @@ type DiaryApp struct {
 	InputField *tview.InputField // 输入密码
 	PassWord   *string
 	Root       *timePoint // 日志info信息树
+	RootPath   *string    // 日志文件路径
 }
 
 var Diary DiaryApp

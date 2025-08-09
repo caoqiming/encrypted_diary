@@ -11,9 +11,7 @@ require (
 )
 
 require (
-	github.com/axgle/mahonia v0.0.0-20180208002826-3358181d7394
 	github.com/gdamore/encoding v1.0.0 // indirect
-	github.com/gdamore/tcell v1.4.0
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/rivo/tview v0.0.0-20240122063236-8526c9fe1b54
@@ -21,5 +19,5 @@ require (
 	github.com/stretchr/testify v1.8.4
 	golang.org/x/sys v0.15.0 // indirect
 	golang.org/x/term v0.15.0 // indirect
-	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/text v0.14.0
 )

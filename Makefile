@@ -7,3 +7,6 @@ build: clear
 
 run: build
 	@cd output && ./diary
+
+just-run:
+	@cd output && ./diary

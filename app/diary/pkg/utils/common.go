@@ -13,3 +13,7 @@ func JsonPrint(v interface{}) {
 	}
 	fmt.Println(string(j))
 }
+
+func Ptr[T any](a T) *T {
+	return &a
+}
